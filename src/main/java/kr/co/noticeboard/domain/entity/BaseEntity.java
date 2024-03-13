@@ -1,8 +1,6 @@
 package kr.co.noticeboard.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,11 +13,14 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity {
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
     @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "modified_at")
-    private LocalDateTime modifiedAt;
+    protected LocalDateTime modifiedAt;
 }
