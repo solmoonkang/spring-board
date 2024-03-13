@@ -40,4 +40,9 @@ public class Member extends BaseEntity {
                 .name(this.name)
                 .build();
     }
+
+    public void updateMember(MemberReqDTO.UPDATE update) {
+        this.email = update.getEmail();
+        this.name = update.getName();
+    }
 }
