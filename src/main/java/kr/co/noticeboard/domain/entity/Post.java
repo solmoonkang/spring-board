@@ -2,6 +2,7 @@ package kr.co.noticeboard.domain.entity;
 
 import jakarta.persistence.*;
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
+import kr.co.noticeboard.domain.dto.response.PostResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -46,11 +47,18 @@ public class Post extends BaseEntity {
         this.comments = comments;
     }
 
-    public static Post createPost(Member member, PostReqDTO.CREATE create) {
+    public static Post toPostEntity(Member member, PostReqDTO.CREATE create) {
         return Post.builder()
                 .title(create.getTitle())
                 .member(member)
                 .content(create.getContent())
+                .build();
+    }
+
+    public PostResDTO.READ toReadDto() {
+        return PostResDTO.READ.builder()
+                .title(this.title)
+                .memberName(member.getName())
                 .build();
     }
 }
