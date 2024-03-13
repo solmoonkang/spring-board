@@ -2,6 +2,7 @@ package kr.co.noticeboard.domain.entity;
 
 import jakarta.persistence.*;
 import kr.co.noticeboard.domain.dto.request.MemberReqDTO;
+import kr.co.noticeboard.domain.dto.response.MemberResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,16 @@ public class Member extends BaseEntity {
         this.name = name;
     }
 
-    public static Member createMember(MemberReqDTO.CREATE create) {
+    public static Member toMemberEntity(MemberReqDTO.CREATE create) {
         return Member.builder()
                 .email(create.getEmail())
                 .name(create.getName())
+                .build();
+    }
+
+    public MemberResDTO.READ toReadDto() {
+        return MemberResDTO.READ.builder()
+                .name(this.name)
                 .build();
     }
 }
