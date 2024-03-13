@@ -1,6 +1,7 @@
 package kr.co.noticeboard.domain.entity;
 
 import jakarta.persistence.*;
+import kr.co.noticeboard.domain.dto.request.MemberReqDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,15 @@ public class Member extends BaseEntity {
     private String name;
 
     @Builder
-    public Member(String email, String name) {
+    private Member(String email, String name) {
         this.email = email;
         this.name = name;
+    }
+
+    public static Member createMember(MemberReqDTO.CREATE create) {
+        return Member.builder()
+                .email(create.getEmail())
+                .name(create.getName())
+                .build();
     }
 }
