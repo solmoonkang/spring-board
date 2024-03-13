@@ -1,11 +1,14 @@
 package kr.co.noticeboard.controller;
 
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
+import kr.co.noticeboard.domain.dto.response.PostResDTO;
 import kr.co.noticeboard.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -21,4 +24,11 @@ public class PostController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<PostResDTO.READ>> findAll() {
+        return ResponseEntity.ofNullable(postService.findAllPost());
+    }
+
+
 }
