@@ -14,9 +14,6 @@ public class PostReqDTO {
         @NotBlank(message = "게시글 제목을 입력해주세요.")
         private String title;
 
-        @NotBlank(message = "게시글 작성자를 입력해주세요.")
-        private String name;
-
         @NotBlank(message = "게시글 본문을 입력해주세요.")
         private String content;
     }
