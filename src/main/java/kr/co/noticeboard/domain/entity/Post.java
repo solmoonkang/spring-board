@@ -5,12 +5,14 @@ import kr.co.noticeboard.domain.dto.request.PostReqDTO;
 import kr.co.noticeboard.domain.dto.response.PostResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "tbl_posts")
 @AttributeOverride(
         name = "id",
@@ -68,5 +70,10 @@ public class Post extends BaseEntity {
                 .memberName(member.getName())
                 .content(content)
                 .build();
+    }
+
+    public void updatePost(PostReqDTO.UPDATE update) {
+        this.title = update.getTitle();
+        this.content = update.getContent();
     }
 }
