@@ -17,4 +17,15 @@ public class PostReqDTO {
         @NotBlank(message = "게시글 본문을 입력해주세요.")
         private String content;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UPDATE {
+
+        private String title;
+
+        private String content;
+    }
 }
