@@ -25,7 +25,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public List<MemberResDTO.READ> getMemberByName(String name) {
+    public List<MemberResDTO.READ> findMemberByName(String name) {
         final List<Member> findMember = memberRepository.findMemberByName(name);
         return findMember.stream().map(Member::toReadDto).collect(Collectors.toList());
     }
