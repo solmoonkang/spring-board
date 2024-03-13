@@ -22,27 +22,31 @@ public class MemberService {
     @Transactional
     public void createMember(MemberReqDTO.CREATE create) {
         final Member member = Member.toMemberEntity(create);
+
         memberRepository.save(member);
     }
 
     public List<MemberResDTO.READ> findMemberByName(String name) {
         final List<Member> findMember = memberRepository.findMemberByName(name);
+
         return findMember.stream().map(Member::toReadDto).collect(Collectors.toList());
     }
 
     @Transactional
     public void updateMember(Long memberId, MemberReqDTO.UPDATE update) {
-        Member updateMember = findMemberById(memberId);
+        Member updateMember = findMemberOrThrow(memberId);
+
         updateMember.updateMember(update);
     }
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member deleteMember = findMemberById(memberId);
+        Member deleteMember = findMemberOrThrow(memberId);
+
         memberRepository.delete(deleteMember);
     }
 
-    private Member findMemberById(Long memberId) {
+    private Member findMemberOrThrow(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
     }
