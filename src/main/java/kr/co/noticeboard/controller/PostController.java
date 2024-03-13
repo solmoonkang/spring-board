@@ -30,5 +30,8 @@ public class PostController {
         return ResponseEntity.ofNullable(postService.findAllPost());
     }
 
-
+    @GetMapping("/{post_id}")
+    public ResponseEntity<PostResDTO.DETAIL> findPostById(@PathVariable(name = "post_id") Long postId) {
+        return ResponseEntity.ofNullable(postService.findPostById(postId));
+    }
 }
