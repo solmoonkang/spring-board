@@ -34,4 +34,13 @@ public class PostController {
     public ResponseEntity<PostResDTO.DETAIL> findPostById(@PathVariable(name = "post_id") Long postId) {
         return ResponseEntity.ofNullable(postService.findPostById(postId));
     }
+
+    @PutMapping("/{post_id}/{member_id}")
+    public ResponseEntity<Void> updatePost(@PathVariable(name = "post_id") Long postId,
+                                           @PathVariable(name = "member_id") Long memberId,
+                                           @RequestBody @Validated PostReqDTO.UPDATE update) {
+        postService.updatePost(postId, memberId, update);
+
+        return ResponseEntity.ok().build();
+    }
 }
