@@ -36,4 +36,11 @@ public class PostService {
         final List<Post> findPost = postRepository.findAll();
         return findPost.stream().map(Post::toReadDto).collect(Collectors.toList());
     }
+
+    public PostResDTO.DETAIL findPostById(Long postId) {
+        final Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+
+        return findPost.toReadDetailDto();
+    }
 }
