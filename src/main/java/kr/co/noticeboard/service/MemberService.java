@@ -30,10 +30,19 @@ public class MemberService {
         return findMember.stream().map(Member::toReadDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public void updateMember(Long memberId, MemberReqDTO.UPDATE update) {
         Member updateMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
         updateMember.updateMember(update);
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member deleteMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        memberRepository.delete(deleteMember);
     }
 }
