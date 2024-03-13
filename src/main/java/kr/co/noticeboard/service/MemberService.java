@@ -1,5 +1,6 @@
 package kr.co.noticeboard.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import kr.co.noticeboard.domain.dto.request.MemberReqDTO;
 import kr.co.noticeboard.domain.dto.response.MemberResDTO;
 import kr.co.noticeboard.domain.entity.Member;
@@ -27,5 +28,12 @@ public class MemberService {
     public List<MemberResDTO.READ> getMemberByName(String name) {
         final List<Member> findMember = memberRepository.findMemberByName(name);
         return findMember.stream().map(Member::toReadDto).collect(Collectors.toList());
+    }
+
+    public void updateMember(Long memberId, MemberReqDTO.UPDATE update) {
+        Member updateMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        updateMember.updateMember(update);
     }
 }
