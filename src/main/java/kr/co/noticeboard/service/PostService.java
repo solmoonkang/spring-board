@@ -43,4 +43,20 @@ public class PostService {
 
         return findPost.toReadDetailDto();
     }
+
+    @Transactional
+    public void updatePost(Long postId, Long memberId, PostReqDTO.UPDATE update) {
+        final Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+
+        checkMemberAuthorization(findPost, memberId);
+
+        findPost.updatePost(update);
+    }
+
+    public void checkMemberAuthorization(Post post, Long memberId) {
+        if (!post.getMember().getId().equals(memberId)) {
+            throw new EntityNotFoundException("회원을 찾을 수 없습니다.");
+        }
+    }
 }
