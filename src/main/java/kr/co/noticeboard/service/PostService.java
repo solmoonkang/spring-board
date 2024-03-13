@@ -29,34 +29,48 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
         final Post post = Post.toPostEntity(member, create);
+
         postRepository.save(post);
     }
 
     public List<PostResDTO.READ> findAllPost() {
         final List<Post> findPost = postRepository.findAll();
+
         return findPost.stream().map(Post::toReadDto).collect(Collectors.toList());
     }
 
     public PostResDTO.DETAIL findPostById(Long postId) {
-        final Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+        final Post findPost = findPostOrThrow(postId);
 
         return findPost.toReadDetailDto();
     }
 
     @Transactional
     public void updatePost(Long postId, Long memberId, PostReqDTO.UPDATE update) {
-        final Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+        final Post updatePost = findPostOrThrow(postId);
 
-        checkMemberAuthorization(findPost, memberId);
+        checkMemberAuthorization(updatePost, memberId);
 
-        findPost.updatePost(update);
+        updatePost.updatePost(update);
+    }
+
+    @Transactional
+    public void deletePost(Long postId, Long memberId) {
+        final Post deletePost = findPostOrThrow(postId);
+
+        checkMemberAuthorization(deletePost, memberId);
+
+        postRepository.delete(deletePost);
     }
 
     public void checkMemberAuthorization(Post post, Long memberId) {
         if (!post.getMember().getId().equals(memberId)) {
             throw new EntityNotFoundException("회원을 찾을 수 없습니다.");
         }
+    }
+
+    private Post findPostOrThrow(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
     }
 }
