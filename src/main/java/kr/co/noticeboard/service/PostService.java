@@ -1,7 +1,10 @@
 package kr.co.noticeboard.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
+import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.entity.Post;
+import kr.co.noticeboard.domain.repository.MemberRepository;
 import kr.co.noticeboard.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,17 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PostService {
 
+    private final MemberRepository memberRepository;
+
     private final PostRepository postRepository;
 
     @Transactional
-    public void createPost(PostReqDTO.CREATE create) {
-        // TODO: Implement Validation
-        final Post post = Post.builder()
-                .title(create.getTitle())
-                .name(create.getName())
-                .content(create.getContent())
-                .build();
+    public void createPost(Long memberId, PostReqDTO.CREATE create) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
+        final Post post = Post.createPost(member, create);
         postRepository.save(post);
     }
 }
