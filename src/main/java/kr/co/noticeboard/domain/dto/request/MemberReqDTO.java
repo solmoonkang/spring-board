@@ -18,4 +18,15 @@ public class MemberReqDTO {
         @NotBlank(message = "이름을 입력해주세요.")
         private String name;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UPDATE {
+
+        private String email;
+
+        private String name;
+    }
 }
