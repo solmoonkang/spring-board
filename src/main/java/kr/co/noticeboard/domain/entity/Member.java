@@ -39,7 +39,7 @@ public class Member extends BaseEntity {
 
     public MemberResDTO.READ toReadDto() {
         return MemberResDTO.READ.builder()
-                .name(this.name)
+                .name(name)
                 .build();
     }
 
