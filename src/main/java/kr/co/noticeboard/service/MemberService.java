@@ -32,17 +32,18 @@ public class MemberService {
 
     @Transactional
     public void updateMember(Long memberId, MemberReqDTO.UPDATE update) {
-        Member updateMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
-
+        Member updateMember = findMemberById(memberId);
         updateMember.updateMember(update);
     }
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member deleteMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
-
+        Member deleteMember = findMemberById(memberId);
         memberRepository.delete(deleteMember);
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
     }
 }
