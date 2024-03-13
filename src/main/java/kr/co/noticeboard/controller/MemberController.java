@@ -20,6 +20,7 @@ public class MemberController {
     @PostMapping
     public ResponseEntity<Void> createMember(@RequestBody @Validated MemberReqDTO.CREATE create) {
         memberService.createMember(create);
+
         return ResponseEntity.ok().build();
     }
 
@@ -32,12 +33,14 @@ public class MemberController {
     public ResponseEntity<Void> updateMember(@PathVariable(name = "member_id") Long memberId,
                                              @RequestBody @Validated MemberReqDTO.UPDATE update) {
         memberService.updateMember(memberId, update);
+
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{member_id}")
     public ResponseEntity<Void> deleteMember(@PathVariable(name = "member_id") Long memberId) {
         memberService.deleteMember(memberId);
+
         return ResponseEntity.ok().build();
     }
 }
