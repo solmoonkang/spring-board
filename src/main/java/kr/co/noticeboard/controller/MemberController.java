@@ -27,4 +27,11 @@ public class MemberController {
     public ResponseEntity<List<MemberResDTO.READ>> findMemberByName(@PathVariable String name) {
         return ResponseEntity.ofNullable(memberService.findMemberByName(name));
     }
+
+    @PutMapping("/{member_id}")
+    public ResponseEntity<Void> updateMember(@PathVariable(name = "member_id") Long memberId,
+                             @RequestBody @Validated MemberReqDTO.UPDATE update) {
+        memberService.updateMember(memberId, update);
+        return ResponseEntity.ok().build();
+    }
 }
