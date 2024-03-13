@@ -5,9 +5,11 @@ import kr.co.noticeboard.domain.dto.request.MemberReqDTO;
 import kr.co.noticeboard.domain.dto.response.MemberResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "tbl_members")
 @AttributeOverride(
         name = "id",
