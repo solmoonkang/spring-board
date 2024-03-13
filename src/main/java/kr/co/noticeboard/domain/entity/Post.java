@@ -57,8 +57,16 @@ public class Post extends BaseEntity {
 
     public PostResDTO.READ toReadDto() {
         return PostResDTO.READ.builder()
-                .title(this.title)
+                .title(title)
                 .memberName(member.getName())
+                .build();
+    }
+
+    public PostResDTO.DETAIL toReadDetailDto() {
+        return PostResDTO.DETAIL.builder()
+                .title(title)
+                .memberName(member.getName())
+                .content(content)
                 .build();
     }
 }
