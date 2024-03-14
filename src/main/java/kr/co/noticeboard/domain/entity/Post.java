@@ -14,7 +14,11 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "tbl_posts")
+@Table(name = "tbl_posts", indexes = {
+        @Index(name = "idx_member", columnList = "member_id"),
+        @Index(name = "idx_status", columnList = "status"),
+        @Index(name = "idx_created_at", columnList = "created_at")
+})
 @AttributeOverride(
         name = "id",
         column = @Column(name = "post_id", length = 4)
