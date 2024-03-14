@@ -1,6 +1,5 @@
 package kr.co.noticeboard.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import kr.co.noticeboard.domain.dto.request.CommentReqDTO;
 import kr.co.noticeboard.domain.entity.Comment;
 import kr.co.noticeboard.domain.entity.Member;
@@ -8,6 +7,8 @@ import kr.co.noticeboard.domain.entity.Post;
 import kr.co.noticeboard.domain.repository.CommentRepository;
 import kr.co.noticeboard.domain.repository.MemberRepository;
 import kr.co.noticeboard.domain.repository.PostRepository;
+import kr.co.noticeboard.infra.exception.NotFoundException;
+import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,53 +24,63 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void createComment(Long memberId, Long postId, CommentReqDTO.CREATE create) {
-        final Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+    public void createComment(Long memberId,
+                              Long postId,
+                              CommentReqDTO.CREATE create) {
 
         final Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
-        final Comment comment = Comment.builder()
-                .member(findMember)
-                .post(findPost)
-                .comment(create.getComment())
-                .build();
+        final Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND));
+
+        final Comment comment = Comment.toCommentEntity(findPost, findMember, create);
 
         commentRepository.save(comment);
     }
 
     @Transactional
-    public void updateComment(Long memberId, Long postId, Long commentId, CommentReqDTO.UPDATE update) {
-        checkMemberAuthorization(memberId);
-        checkPostExists(postId);
+    public void updateComment(Long memberId,
+                              Long postId,
+                              Long commentId,
+                              CommentReqDTO.UPDATE update) {
+
+        verifyMemberExistsOrThrow(memberId);
+
+        verifyPostExistsOrThrow(postId);
 
         final Comment updateComment = commentRepository.findById(commentId)
-                        .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+                        .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_COMMENT_NOT_FOUND));
 
         updateComment.updateComment(update);
     }
 
     @Transactional
-    public void deleteComment(Long memberId, Long postId, Long commentId) {
-        checkMemberAuthorization(memberId);
-        checkPostExists(postId);
+    public void deleteComment(Long memberId,
+                              Long postId,
+                              Long commentId) {
+
+        verifyMemberExistsOrThrow(memberId);
+
+        verifyPostExistsOrThrow(postId);
 
         final Comment deleteComment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_NOT_FOUND));
 
         deleteComment.markAsDeleted();
     }
 
-    private void checkMemberAuthorization(Long memberId) {
+    private void verifyMemberExistsOrThrow(Long memberId) {
+
         if (!memberRepository.existsById(memberId)) {
-            throw new EntityNotFoundException("회원을 찾을 수 없습니다.");
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
         }
     }
 
-    private void checkPostExists(Long postId) {
+    private void verifyPostExistsOrThrow(Long postId) {
+
         if (!postRepository.existsById(postId)) {
-            throw new EntityNotFoundException("게시글을 찾을 수 없습니다.");
+            throw new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND);
         }
     }
 }

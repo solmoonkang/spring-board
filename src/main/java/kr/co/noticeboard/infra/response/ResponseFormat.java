@@ -39,10 +39,11 @@ public class ResponseFormat<T> {
                 .build();
     }
 
-    public static <T> ResponseFormat<T> failureMessage(ResponseStatus responseStatus) {
-        return ResponseFormat.<T>builder()
+    public static ResponseFormat<Void> failureMessage(ResponseStatus responseStatus,
+                                                      String message) {
+        return ResponseFormat.<Void>builder()
                 .status(responseStatus.getStatus())
-                .message(responseStatus.getMessage())
+                .message(message)
                 .data(null)
                 .build();
     }

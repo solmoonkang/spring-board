@@ -26,11 +26,13 @@ public class Member extends BaseEntity {
 
     @Builder
     private Member(String email, String name) {
+
         this.email = email;
         this.name = name;
     }
 
     public static Member toMemberEntity(MemberReqDTO.CREATE create) {
+
         return Member.builder()
                 .email(create.getEmail())
                 .name(create.getName())
@@ -38,12 +40,14 @@ public class Member extends BaseEntity {
     }
 
     public MemberResDTO.READ toReadDto() {
+
         return MemberResDTO.READ.builder()
                 .name(name)
                 .build();
     }
 
     public void updateMember(MemberReqDTO.UPDATE update) {
+
         this.email = update.getEmail();
         this.name = update.getName();
     }
