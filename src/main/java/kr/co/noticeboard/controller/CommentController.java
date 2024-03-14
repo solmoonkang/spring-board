@@ -22,4 +22,14 @@ public class CommentController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{member_id}/{post_id}/{comment_id}")
+    public ResponseEntity<Void> updateComment(@PathVariable(name = "member_id")  Long memberId,
+                                              @PathVariable(name = "post_id")  Long postId,
+                                              @PathVariable(name = "comment_id")  Long commentId,
+                                              @RequestBody @Validated CommentReqDTO.UPDATE update) {
+        commentService.updateComment(memberId, postId, commentId, update);
+
+        return ResponseEntity.ok().build();
+    }
 }
