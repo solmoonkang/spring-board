@@ -36,16 +36,30 @@ public class Comment extends BaseEntity {
     public Comment(Post post,
                    Member member,
                    String comment) {
+
         this.post = post;
         this.member = member;
         this.comment = comment;
     }
 
+    public static Comment toCommentEntity(Post post,
+                                          Member member,
+                                          CommentReqDTO.CREATE create) {
+
+        return Comment.builder()
+                .post(post)
+                .member(member)
+                .comment(create.getComment())
+                .build();
+    }
+
     public void updateComment(CommentReqDTO.UPDATE update) {
+
         this.comment = update.getComment();
     }
 
     public void markAsDeleted() {
+
         this.status = DeleteStatus.DELETED;
     }
 }
