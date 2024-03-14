@@ -98,6 +98,7 @@ public class Post extends BaseEntity {
     private List<CommentResDTO.READ> toReadCommentDto() {
 
         return comments.stream()
+                .filter(comment -> comment.getStatus() == DeleteStatus.NOT_DELETED)
                 .map(comment -> CommentResDTO.READ.builder()
                         .username(comment.getMember().getName())
                         .status(comment.getStatus())
