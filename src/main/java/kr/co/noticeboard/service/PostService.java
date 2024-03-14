@@ -2,6 +2,7 @@ package kr.co.noticeboard.service;
 
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
 import kr.co.noticeboard.domain.dto.response.PostResDTO;
+import kr.co.noticeboard.domain.entity.DeleteStatus;
 import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.entity.Post;
 import kr.co.noticeboard.domain.repository.MemberRepository;
@@ -37,9 +38,12 @@ public class PostService {
 
     public List<PostResDTO.READ> findAllPost() {
 
-        final List<Post> findPost = postRepository.findAll();
+        final List<Post> findPost = postRepository.findAllPostsOrderByCreatedAtDesc();
 
-        return findPost.stream().map(Post::toReadDto).collect(Collectors.toList());
+        return findPost.stream()
+                .filter(post -> post.getStatus() == DeleteStatus.NOT_DELETED)
+                .map(Post::toReadDto)
+                .collect(Collectors.toList());
     }
 
     public PostResDTO.DETAIL findPostById(Long postId) {
