@@ -1,6 +1,9 @@
 package kr.co.noticeboard.domain.dto.response;
 
+import kr.co.noticeboard.domain.entity.DeleteStatus;
 import lombok.*;
+
+import java.util.List;
 
 public class PostResDTO {
 
@@ -13,6 +16,8 @@ public class PostResDTO {
         private String title;
 
         private String memberName;
+
+        private DeleteStatus status;
     }
 
     @Getter
@@ -26,5 +31,9 @@ public class PostResDTO {
         private String memberName;
 
         private String content;
+
+        private DeleteStatus status;
+
+        private List<CommentResDTO.READ> comments;
     }
 }

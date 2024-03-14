@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import kr.co.noticeboard.domain.dto.request.CommentReqDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "tbl_comments")
 @AttributeOverride(
         name = "id",

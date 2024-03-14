@@ -2,6 +2,7 @@ package kr.co.noticeboard.domain.entity;
 
 import jakarta.persistence.*;
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
+import kr.co.noticeboard.domain.dto.response.CommentResDTO;
 import kr.co.noticeboard.domain.dto.response.PostResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -66,6 +67,7 @@ public class Post extends BaseEntity {
         return PostResDTO.READ.builder()
                 .title(title)
                 .memberName(member.getName())
+                .status(status)
                 .build();
     }
 
@@ -74,6 +76,8 @@ public class Post extends BaseEntity {
                 .title(title)
                 .memberName(member.getName())
                 .content(content)
+                .status(status)
+                .comments(toReadCommentDto())
                 .build();
     }
 
@@ -84,5 +88,14 @@ public class Post extends BaseEntity {
 
     public void markAsDeleted() {
         this.status = DeleteStatus.DELETED;
+    }
+
+    private List<CommentResDTO.READ> toReadCommentDto() {
+        return comments.stream()
+                .map(comment -> CommentResDTO.READ.builder()
+                        .username(comment.getMember().getName())
+                        .status(comment.getStatus())
+                        .comment(comment.getComment())
+                        .build()).toList();
     }
 }
