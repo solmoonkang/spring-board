@@ -38,7 +38,8 @@ public class MemberService {
     @Transactional
     public void updateMember(Long memberId, MemberReqDTO.UPDATE update) {
 
-        Member updateMember = findMemberOrThrow(memberId);
+        final Member updateMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND));
 
         updateMember.updateMember(update);
     }
@@ -46,14 +47,9 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long memberId) {
 
-        Member deleteMember = findMemberOrThrow(memberId);
+        final Member deleteMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND));
 
         memberRepository.delete(deleteMember);
-    }
-
-    private Member findMemberOrThrow(Long memberId) {
-
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND));
     }
 }

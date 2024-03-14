@@ -11,10 +11,10 @@ import kr.co.noticeboard.infra.exception.NotFoundException;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,19 +50,20 @@ public class PostService {
 
     public PostResDTO.DETAIL findPostById(Long postId) {
 
-        final Post findPost = findPostOrThrow(postId);
+        final Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
         return findPost.toReadDetailDto();
     }
 
     @Transactional
-    public void updatePost(Long postId,
-                           Long memberId,
-                           PostReqDTO.UPDATE update) {
+    public void updatePost(Long postId, Long memberId, PostReqDTO.UPDATE update) {
 
-        final Post updatePost = findPostOrThrow(postId);
+        final Post updatePost = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
         verifyMemberExistsOrThrow(updatePost, memberId);
+        verifyPostNotDeletedOrThrow(updatePost);
 
         updatePost.updatePost(update);
     }
@@ -70,23 +71,26 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, Long memberId) {
 
-        final Post deletePost = findPostOrThrow(postId);
+        final Post deletePost = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
         verifyMemberExistsOrThrow(deletePost, memberId);
+        verifyPostNotDeletedOrThrow(deletePost);
 
         deletePost.markAsDeleted();
     }
 
-    public void verifyMemberExistsOrThrow(Post post, Long memberId) {
+    private void verifyMemberExistsOrThrow(Post post, Long memberId) {
 
         if (!post.getMember().getId().equals(memberId)) {
             throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
         }
     }
 
-    private Post findPostOrThrow(Long postId) {
+    private void verifyPostNotDeletedOrThrow(Post post) {
 
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
+        if (post.getStatus() == DeleteStatus.DELETED) {
+            throw new NotFoundException(ResponseStatus.FAIL_POST_ALREADY_DELETED);
+        }
     }
 }

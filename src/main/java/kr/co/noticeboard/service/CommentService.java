@@ -2,6 +2,7 @@ package kr.co.noticeboard.service;
 
 import kr.co.noticeboard.domain.dto.request.CommentReqDTO;
 import kr.co.noticeboard.domain.entity.Comment;
+import kr.co.noticeboard.domain.entity.DeleteStatus;
 import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.entity.Post;
 import kr.co.noticeboard.domain.repository.CommentRepository;
@@ -24,9 +25,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void createComment(Long memberId,
-                              Long postId,
-                              CommentReqDTO.CREATE create) {
+    public void createComment(Long memberId, Long postId, CommentReqDTO.CREATE create) {
 
         final Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
@@ -46,26 +45,26 @@ public class CommentService {
                               CommentReqDTO.UPDATE update) {
 
         verifyMemberExistsOrThrow(memberId);
-
         verifyPostExistsOrThrow(postId);
 
         final Comment updateComment = commentRepository.findById(commentId)
                         .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_COMMENT_NOT_FOUND));
 
+        verifyCommentNotDeletedOrThrow(updateComment);
+
         updateComment.updateComment(update);
     }
 
     @Transactional
-    public void deleteComment(Long memberId,
-                              Long postId,
-                              Long commentId) {
+    public void deleteComment(Long memberId, Long postId, Long commentId) {
 
         verifyMemberExistsOrThrow(memberId);
-
         verifyPostExistsOrThrow(postId);
 
         final Comment deleteComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_NOT_FOUND));
+
+        verifyCommentNotDeletedOrThrow(deleteComment);
 
         deleteComment.markAsDeleted();
     }
@@ -81,6 +80,13 @@ public class CommentService {
 
         if (!postRepository.existsById(postId)) {
             throw new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND);
+        }
+    }
+
+    private void verifyCommentNotDeletedOrThrow(Comment comment) {
+
+        if (comment.getStatus() == DeleteStatus.DELETED) {
+            throw new NotFoundException(ResponseStatus.FAIL_POST_ALREADY_DELETED);
         }
     }
 }

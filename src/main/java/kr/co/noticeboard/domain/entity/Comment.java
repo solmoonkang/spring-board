@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "tbl_comments")
+@Table(name = "tbl_comments", indexes = {
+        @Index(name = "idx_post", columnList = "post_id"),
+        @Index(name = "idx_member", columnList = "member_id")
+})
 @AttributeOverride(
         name = "id",
         column = @Column(name = "comment_id", length = 4)

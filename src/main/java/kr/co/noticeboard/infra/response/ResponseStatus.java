@@ -23,8 +23,10 @@ public enum ResponseStatus {
     FAIL_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "❎ [ERROR] 요청한 회원을 찾을 수 없습니다."),
 
     FAIL_POST_NOT_FOUND(HttpStatus.NOT_FOUND, "❎ [ERROR] 요청한 게시글을 찾을 수 없습니다."),
+    FAIL_POST_ALREADY_DELETED(HttpStatus.GONE, "❎ [ERROR] 요청한 게시글은 삭제되었습니다."),
 
-    FAIL_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "❎ [ERROR] 요청한 댓글을 찾을 수 없습니다.");
+    FAIL_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "❎ [ERROR] 요청한 댓글을 찾을 수 없습니다."),
+    FAIL_COMMENT_ALREADY_DELETED(HttpStatus.GONE, "❎ [ERROR] 요청한 댓글은 삭제되었습니다.");
 
     private HttpStatus status;
 
