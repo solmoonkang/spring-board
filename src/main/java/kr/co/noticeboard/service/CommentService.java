@@ -44,10 +44,21 @@ public class CommentService {
         checkMemberAuthorization(memberId);
         checkPostExists(postId);
 
-        final Comment comment = commentRepository.findById(commentId)
+        final Comment updateComment = commentRepository.findById(commentId)
                         .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
 
-        comment.updateComment(update);
+        updateComment.updateComment(update);
+    }
+
+    @Transactional
+    public void deleteComment(Long memberId, Long postId, Long commentId) {
+        checkMemberAuthorization(memberId);
+        checkPostExists(postId);
+
+        final Comment deleteComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+
+        deleteComment.markAsDeleted();
     }
 
     private void checkMemberAuthorization(Long memberId) {
