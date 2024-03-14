@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CommentService {
 
     private final MemberRepository memberRepository;
@@ -28,15 +27,38 @@ public class CommentService {
         final Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
 
-        final Post post = postRepository.findById(postId)
+        final Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
 
         final Comment comment = Comment.builder()
                 .member(findMember)
-                .post(post)
+                .post(findPost)
                 .comment(create.getComment())
                 .build();
 
         commentRepository.save(comment);
+    }
+
+    @Transactional
+    public void updateComment(Long memberId, Long postId, Long commentId, CommentReqDTO.UPDATE update) {
+        checkMemberAuthorization(memberId);
+        checkPostExists(postId);
+
+        final Comment comment = commentRepository.findById(commentId)
+                        .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+
+        comment.updateComment(update);
+    }
+
+    private void checkMemberAuthorization(Long memberId) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new EntityNotFoundException("회원을 찾을 수 없습니다.");
+        }
+    }
+
+    private void checkPostExists(Long postId) {
+        if (!postRepository.existsById(postId)) {
+            throw new EntityNotFoundException("게시글을 찾을 수 없습니다.");
+        }
     }
 }
