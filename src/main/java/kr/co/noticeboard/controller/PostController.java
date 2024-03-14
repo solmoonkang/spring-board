@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -28,10 +29,10 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseFormat<List<PostResDTO.READ>> findAll() {
+    public ResponseFormat<List<PostResDTO.READ>> findAll(Pageable pageable) {
 
         return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
-                postService.findAllPost()
+                postService.findAllPost(pageable)
         );
     }
 
