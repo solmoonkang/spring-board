@@ -60,7 +60,7 @@ public class PostService {
 
         checkMemberAuthorization(deletePost, memberId);
 
-        postRepository.delete(deletePost);
+        deletePost.markAsDeleted();
     }
 
     public void checkMemberAuthorization(Post post, Long memberId) {
