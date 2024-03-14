@@ -32,4 +32,13 @@ public class CommentController {
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{member_id}/{post_id}/{comment_id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable(name = "member_id")  Long memberId,
+                                              @PathVariable(name = "post_id")  Long postId,
+                                              @PathVariable(name = "comment_id")  Long commentId) {
+        commentService.deleteComment(memberId, postId, commentId);
+
+        return ResponseEntity.ok().build();
+    }
 }
