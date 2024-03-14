@@ -31,6 +31,10 @@ public class Post extends BaseEntity {
     @Column(name = "content", length = 500)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private DeleteStatus status = DeleteStatus.NOT_DELETED;
+
     @OneToMany(
             mappedBy = "post",
             cascade = CascadeType.REMOVE,
@@ -49,7 +53,8 @@ public class Post extends BaseEntity {
         this.comments = comments;
     }
 
-    public static Post toPostEntity(Member member, PostReqDTO.CREATE create) {
+    public static Post toPostEntity(Member member,
+                                    PostReqDTO.CREATE create) {
         return Post.builder()
                 .title(create.getTitle())
                 .member(member)
@@ -75,5 +80,9 @@ public class Post extends BaseEntity {
     public void updatePost(PostReqDTO.UPDATE update) {
         this.title = update.getTitle();
         this.content = update.getContent();
+    }
+
+    public void markAsDeleted() {
+        this.status = DeleteStatus.DELETED;
     }
 }
