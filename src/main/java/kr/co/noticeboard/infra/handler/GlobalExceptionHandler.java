@@ -3,7 +3,6 @@ package kr.co.noticeboard.infra.handler;
 import kr.co.noticeboard.infra.exception.BusinessLogicException;
 import kr.co.noticeboard.infra.exception.InvalidRequestException;
 import kr.co.noticeboard.infra.exception.NotFoundException;
-import kr.co.noticeboard.infra.exception.UnauthorizedException;
 import kr.co.noticeboard.infra.response.ResponseFormat;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +33,6 @@ public class GlobalExceptionHandler {
                 ResponseFormat.failureMessage(ResponseStatus.FAIL_NOT_FOUND, e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseFormat);
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    protected ResponseEntity<ResponseFormat<Void>> handleUnauthorizedException(UnauthorizedException e) {
-        log.warn("UNAUTHORIZED REQUEST: ", e);
-
-        ResponseFormat<Void> responseFormat =
-                ResponseFormat.failureMessage(ResponseStatus.FAIL_UNAUTHORIZED, e.getMessage());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseFormat);
     }
 
     @ExceptionHandler(BusinessLogicException.class)
