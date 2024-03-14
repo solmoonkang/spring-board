@@ -48,14 +48,15 @@ public class Post extends BaseEntity {
                 Member member,
                 String content,
                 List<Comment> comments) {
+
         this.title = title;
         this.member = member;
         this.content = content;
         this.comments = comments;
     }
 
-    public static Post toPostEntity(Member member,
-                                    PostReqDTO.CREATE create) {
+    public static Post toPostEntity(Member member, PostReqDTO.CREATE create) {
+
         return Post.builder()
                 .title(create.getTitle())
                 .member(member)
@@ -64,6 +65,7 @@ public class Post extends BaseEntity {
     }
 
     public PostResDTO.READ toReadDto() {
+
         return PostResDTO.READ.builder()
                 .title(title)
                 .memberName(member.getName())
@@ -72,6 +74,7 @@ public class Post extends BaseEntity {
     }
 
     public PostResDTO.DETAIL toReadDetailDto() {
+
         return PostResDTO.DETAIL.builder()
                 .title(title)
                 .memberName(member.getName())
@@ -82,15 +85,18 @@ public class Post extends BaseEntity {
     }
 
     public void updatePost(PostReqDTO.UPDATE update) {
+
         this.title = update.getTitle();
         this.content = update.getContent();
     }
 
     public void markAsDeleted() {
+
         this.status = DeleteStatus.DELETED;
     }
 
     private List<CommentResDTO.READ> toReadCommentDto() {
+
         return comments.stream()
                 .map(comment -> CommentResDTO.READ.builder()
                         .username(comment.getMember().getName())
