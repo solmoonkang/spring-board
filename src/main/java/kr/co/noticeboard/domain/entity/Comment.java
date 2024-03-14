@@ -42,4 +42,8 @@ public class Comment extends BaseEntity {
     public void updateComment(CommentReqDTO.UPDATE update) {
         this.comment = update.getComment();
     }
+
+    public void markAsDeleted() {
+        this.status = DeleteStatus.DELETED;
+    }
 }
