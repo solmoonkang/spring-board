@@ -1,9 +1,13 @@
 package kr.co.noticeboard.domain.repository.search;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
 import kr.co.noticeboard.domain.entity.Post;
+import kr.co.noticeboard.domain.entity.QComment;
 import kr.co.noticeboard.domain.entity.QMember;
 import kr.co.noticeboard.domain.entity.QPost;
 import kr.co.noticeboard.infra.exception.NotFoundException;
@@ -14,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +28,20 @@ public class PostSearchRepository {
 
     private final JPAQueryFactory queryFactory;
 
+    private final QMember qMember = QMember.member;
+
     private final QPost qPost = QPost.post;
 
+    private final QComment qComment = QComment.comment1;
+
     public Page<Post> search(Pageable pageable, PostReqDTO.CONDITION condition) {
+
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        pageable.getSort().forEach(order -> {
+            PathBuilder<Post> pathBuilder = new PathBuilder<>(Post.class, "post");
+            orderSpecifiers.add(new OrderSpecifier(order.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(order.getProperty())));
+        });
 
         List<Post> posts = queryFactory
                 .selectFrom(qPost)
@@ -33,6 +49,7 @@ public class PostSearchRepository {
                 .where(
                         postIdsIn(condition.getPostIds())
                 )
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -47,6 +64,16 @@ public class PostSearchRepository {
                 .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
         return new PageImpl<>(posts, pageable, total);
+    }
+
+    public Post findPostWithCommentsById(Long postId) {
+
+        return queryFactory
+                .selectFrom(qPost)
+                .leftJoin(qPost.comments, qComment).fetchJoin()
+                .leftJoin(qComment.member, qMember).fetchJoin()
+                .where(qPost.id.eq(postId))
+                .fetchOne();
     }
 
     private BooleanExpression postIdsIn(List<Long> postIds) {
