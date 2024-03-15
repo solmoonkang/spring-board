@@ -7,8 +7,8 @@ public class CommentReqDTO {
 
     @Getter
     @Builder
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class CREATE {
 
         @NotBlank(message = "댓글을 입력해주세요.")
@@ -17,8 +17,8 @@ public class CommentReqDTO {
 
     @Getter
     @Builder
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class UPDATE {
 
         private String comment;
