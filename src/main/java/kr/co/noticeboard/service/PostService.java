@@ -51,10 +51,9 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public PostResDTO.DETAIL findPostById(Long postId) {
+    public PostResDTO.DETAIL findPostWithCommentById(Long postId) {
 
-        final Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
+        final Post findPost = postSearchRepository.findPostWithCommentsById(postId);
 
         verifyPostNotDeletedOrThrow(findPost);
 
