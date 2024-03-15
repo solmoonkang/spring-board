@@ -35,6 +35,7 @@ public class PostSearchRepository {
         List<Post> posts = queryFactory
                 .selectFrom(qPost)
                 .leftJoin(qPost.member, QMember.member).fetchJoin()
+                .orderBy(qPost.createdAt.asc())
                 .where(postIdsIn(condition.getPostIds()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
