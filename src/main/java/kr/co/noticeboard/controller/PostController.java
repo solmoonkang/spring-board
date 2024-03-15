@@ -29,18 +29,19 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseFormat<List<PostResDTO.READ>> findAll(Pageable pageable) {
+    public ResponseFormat<List<PostResDTO.READ>> findAllPost(Pageable pageable,
+                                                             @RequestBody PostReqDTO.CONDITION condition) {
 
         return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
-                postService.findAllPost(pageable)
+                postService.findAllPost(pageable, condition)
         );
     }
 
     @GetMapping("/{post_id}")
-    public ResponseFormat<PostResDTO.DETAIL> findPostById(@PathVariable(name = "post_id") Long postId) {
+    public ResponseFormat<PostResDTO.DETAIL> findPostWithCommentById(@PathVariable(name = "post_id") Long postId) {
 
         return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
-                postService.findPostById(postId)
+                postService.findPostWithCommentById(postId)
         );
     }
 

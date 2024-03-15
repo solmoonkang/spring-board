@@ -7,6 +7,7 @@ import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.entity.Post;
 import kr.co.noticeboard.domain.repository.MemberRepository;
 import kr.co.noticeboard.domain.repository.PostRepository;
+import kr.co.noticeboard.domain.repository.search.PostSearchRepository;
 import kr.co.noticeboard.infra.exception.NotFoundException;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+    private final PostSearchRepository postSearchRepository;
+
     @Transactional
     public void createPost(Long memberId, PostReqDTO.CREATE create) {
 
@@ -38,20 +41,19 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<PostResDTO.READ> findAllPost(Pageable pageable) {
+    public List<PostResDTO.READ> findAllPost(Pageable pageable, PostReqDTO.CONDITION condition) {
 
-        final Page<Post> findPostPage = postRepository.findAllPostsOrderByCreatedAtDesc(pageable);
+        final Page<Post> findPostsPage = postSearchRepository.findAllPost(pageable, condition);
 
-        return findPostPage.getContent().stream()
+        return findPostsPage.getContent().stream()
                 .filter(post -> post.getStatus() == DeleteStatus.NOT_DELETED)
                 .map(Post::toReadDto)
                 .collect(Collectors.toList());
     }
 
-    public PostResDTO.DETAIL findPostById(Long postId) {
+    public PostResDTO.DETAIL findPostWithCommentById(Long postId) {
 
-        final Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
+        final Post findPost = postSearchRepository.findPostWithCommentsById(postId);
 
         verifyPostNotDeletedOrThrow(findPost);
 
