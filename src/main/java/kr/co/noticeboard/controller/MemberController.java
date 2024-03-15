@@ -26,11 +26,19 @@ public class MemberController {
         return ResponseFormat.successMessage(ResponseStatus.SUCCESS_CREATED);
     }
 
-    @GetMapping("/{name}")
-    public ResponseFormat<List<MemberResDTO.READ>> findMemberByName(@PathVariable String name) {
+    @GetMapping("/{email}")
+    public ResponseFormat<MemberResDTO.READ> findMemberByEmail(@PathVariable String email) {
 
         return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
-                memberService.findMemberByName(name)
+                memberService.findMemberByEmail(email)
+        );
+    }
+
+    @GetMapping
+    public ResponseFormat<List<MemberResDTO.READ>> findAllMember() {
+
+        return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
+                memberService.findAllMember()
         );
     }
 
