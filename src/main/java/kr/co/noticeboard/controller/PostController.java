@@ -29,10 +29,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseFormat<List<PostResDTO.READ>> findAll(Pageable pageable) {
+    public ResponseFormat<List<PostResDTO.READ>> findAllPost(Pageable pageable,
+                                                             @RequestBody PostReqDTO.CONDITION condition) {
 
         return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
-                postService.findAllPost(pageable)
+                postService.findAllPost(pageable, condition)
         );
     }
 
