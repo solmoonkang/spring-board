@@ -42,6 +42,7 @@ public class Member extends BaseEntity {
     public MemberResDTO.READ toReadDto() {
 
         return MemberResDTO.READ.builder()
+                .email(email)
                 .name(name)
                 .build();
     }
