@@ -53,6 +53,8 @@ public class PostService {
         final Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
+        verifyPostNotDeletedOrThrow(findPost);
+
         return findPost.toReadDetailDto();
     }
 
