@@ -1,6 +1,7 @@
 package kr.co.noticeboard.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import kr.co.noticeboard.domain.dto.response.CommentResDTO;
 import lombok.*;
 
 import java.util.List;
