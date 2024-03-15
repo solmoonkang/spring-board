@@ -8,8 +8,8 @@ public class MemberReqDTO {
 
     @Getter
     @Builder
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class CREATE {
 
         @Email(message = "이메일을 입력해주세요.")
@@ -21,8 +21,8 @@ public class MemberReqDTO {
 
     @Getter
     @Builder
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class UPDATE {
 
         private String email;
