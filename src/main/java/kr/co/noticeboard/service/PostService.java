@@ -43,7 +43,7 @@ public class PostService {
 
     public List<PostResDTO.READ> findAllPost(Pageable pageable, PostReqDTO.CONDITION condition) {
 
-        final Page<Post> findPostsPage = postSearchRepository.search(pageable, condition);
+        final Page<Post> findPostsPage = postSearchRepository.findAllPost(pageable, condition);
 
         return findPostsPage.getContent().stream()
                 .filter(post -> post.getStatus() == DeleteStatus.NOT_DELETED)

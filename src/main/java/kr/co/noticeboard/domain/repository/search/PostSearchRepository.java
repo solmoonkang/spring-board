@@ -1,9 +1,6 @@
 package kr.co.noticeboard.domain.repository.search;
 
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.noticeboard.domain.dto.request.PostReqDTO;
 import kr.co.noticeboard.domain.entity.Post;
@@ -18,7 +15,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,22 +30,12 @@ public class PostSearchRepository {
 
     private final QComment qComment = QComment.comment1;
 
-    public Page<Post> search(Pageable pageable, PostReqDTO.CONDITION condition) {
-
-        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-
-        pageable.getSort().forEach(order -> {
-            PathBuilder<Post> pathBuilder = new PathBuilder<>(Post.class, "post");
-            orderSpecifiers.add(new OrderSpecifier(order.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(order.getProperty())));
-        });
+    public Page<Post> findAllPost(Pageable pageable, PostReqDTO.CONDITION condition) {
 
         List<Post> posts = queryFactory
                 .selectFrom(qPost)
                 .leftJoin(qPost.member, QMember.member).fetchJoin()
-                .where(
-                        postIdsIn(condition.getPostIds())
-                )
-                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+                .where(postIdsIn(condition.getPostIds()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -57,9 +43,7 @@ public class PostSearchRepository {
         long total = Optional.ofNullable(queryFactory
                 .select(QPost.post.count())
                 .from(QPost.post)
-                .where(
-                        postIdsIn(condition.getPostIds())
-                )
+                .where(postIdsIn(condition.getPostIds()))
                 .fetchOne())
                 .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND));
 
