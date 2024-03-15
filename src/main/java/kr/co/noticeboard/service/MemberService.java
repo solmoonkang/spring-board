@@ -4,6 +4,7 @@ import kr.co.noticeboard.domain.dto.request.MemberReqDTO;
 import kr.co.noticeboard.domain.dto.response.MemberResDTO;
 import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.repository.MemberRepository;
+import kr.co.noticeboard.infra.exception.DuplicatedException;
 import kr.co.noticeboard.infra.exception.NotFoundException;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +24,26 @@ public class MemberService {
     @Transactional
     public void createMember(MemberReqDTO.CREATE create) {
 
+        verifyMemberEmailExistsOrThrow(create.getEmail());
+
         final Member member = Member.toMemberEntity(create);
 
         memberRepository.save(member);
     }
 
-    public List<MemberResDTO.READ> findMemberByName(String name) {
+    public MemberResDTO.READ findMemberByEmail(String email) {
 
-        final List<Member> findMember = memberRepository.findMemberByName(name);
+        final Member findMember = memberRepository.findMemberByEmail(email)
+                .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND));
 
-        return findMember.stream().map(Member::toReadDto).collect(Collectors.toList());
+        return findMember.toReadDto();
+    }
+
+    public List<MemberResDTO.READ> findAllMember() {
+
+        final List<Member> findAllMember = memberRepository.findAll();
+
+        return findAllMember.stream().map(Member::toReadDto).collect(Collectors.toList());
     }
 
     @Transactional
@@ -51,5 +62,12 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND));
 
         memberRepository.delete(deleteMember);
+    }
+
+    private void verifyMemberEmailExistsOrThrow(String email) {
+
+        if (memberRepository.existsByEmail(email)) {
+            throw new DuplicatedException(ResponseStatus.FAIL_EMAIL_DUPLICATION);
+        }
     }
 }
