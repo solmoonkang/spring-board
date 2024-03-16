@@ -11,11 +11,10 @@ import kr.co.noticeboard.domain.repository.search.PostSearchRepository;
 import kr.co.noticeboard.infra.exception.NotFoundException;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,11 +40,11 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<PostResDTO.READ> findAllPost(Pageable pageable, PostReqDTO.CONDITION condition) {
+    public List<PostResDTO.READ> findAllPost(LocalDateTime lastPostCreatedAt) {
 
-        final Page<Post> findPostsPage = postSearchRepository.findAllPost(pageable, condition);
+        final List<Post> findPostsPage = postSearchRepository.findAllPostByCursor(lastPostCreatedAt);
 
-        return findPostsPage.getContent().stream()
+        return findPostsPage.stream()
                 .filter(post -> post.getStatus() == DeleteStatus.NOT_DELETED)
                 .map(Post::toReadDto)
                 .collect(Collectors.toList());
