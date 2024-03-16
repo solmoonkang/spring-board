@@ -6,10 +6,10 @@ import kr.co.noticeboard.infra.response.ResponseFormat;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import kr.co.noticeboard.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,11 +29,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseFormat<List<PostResDTO.READ>> findAllPost(Pageable pageable,
-                                                             @RequestBody PostReqDTO.CONDITION condition) {
+    public ResponseFormat<List<PostResDTO.READ>> findAllPost(
+            @RequestParam(name = "last_post_created_at", required = false) LocalDateTime lastPostCreatedAt) {
 
         return ResponseFormat.successMessageWithData(ResponseStatus.SUCCESS_EXECUTE,
-                postService.findAllPost(pageable, condition)
+                postService.findAllPost(lastPostCreatedAt)
         );
     }
 
