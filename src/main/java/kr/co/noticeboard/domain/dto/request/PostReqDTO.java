@@ -1,10 +1,7 @@
 package kr.co.noticeboard.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import kr.co.noticeboard.domain.dto.response.CommentResDTO;
 import lombok.*;
-
-import java.util.List;
 
 public class PostReqDTO {
 
@@ -30,14 +27,5 @@ public class PostReqDTO {
         private String title;
 
         private String content;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class CONDITION {
-
-        private List<Long> postIds;
     }
 }
