@@ -24,18 +24,26 @@ public class Member extends BaseEntity {
     @Column(name = "name", length = 30)
     private String name;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @Builder
-    private Member(String email, String name) {
+    private Member(String email,
+                   String name,
+                   String password) {
 
         this.email = email;
         this.name = name;
+        this.password = password;
     }
 
-    public static Member toMemberEntity(MemberReqDTO.CREATE create) {
+    public static Member toMemberEntity(MemberReqDTO.CREATE create,
+                                        String encodedPassword) {
 
         return Member.builder()
                 .email(create.getEmail())
                 .name(create.getName())
+                .password(encodedPassword)
                 .build();
     }
 
