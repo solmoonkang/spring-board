@@ -8,6 +8,7 @@ import kr.co.noticeboard.infra.exception.DuplicatedException;
 import kr.co.noticeboard.infra.exception.NotFoundException;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,16 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public void createMember(MemberReqDTO.CREATE create) {
 
         verifyMemberEmailExistsOrThrow(create.getEmail());
 
-        final Member member = Member.toMemberEntity(create);
+        String encodedPassword = passwordEncoder.encode(create.getPassword());
+
+        final Member member = Member.toMemberEntity(create, encodedPassword);
 
         memberRepository.save(member);
     }
