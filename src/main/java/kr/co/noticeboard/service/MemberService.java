@@ -1,7 +1,7 @@
 package kr.co.noticeboard.service;
 
-import kr.co.noticeboard.domain.dto.request.MemberReqDTO;
-import kr.co.noticeboard.domain.dto.response.MemberResDTO;
+import kr.co.noticeboard.service.dto.request.MemberReqDTO;
+import kr.co.noticeboard.service.dto.response.MemberResDTO;
 import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.repository.MemberRepository;
 import kr.co.noticeboard.infra.exception.DuplicatedException;

@@ -1,7 +1,7 @@
 package kr.co.noticeboard.service;
 
-import kr.co.noticeboard.domain.dto.request.PostReqDTO;
-import kr.co.noticeboard.domain.dto.response.PostResDTO;
+import kr.co.noticeboard.service.dto.request.PostReqDTO;
+import kr.co.noticeboard.service.dto.response.PostResDTO;
 import kr.co.noticeboard.domain.entity.DeleteStatus;
 import kr.co.noticeboard.domain.entity.Member;
 import kr.co.noticeboard.domain.entity.Post;

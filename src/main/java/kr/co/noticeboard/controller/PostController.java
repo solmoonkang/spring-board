@@ -1,7 +1,7 @@
 package kr.co.noticeboard.controller;
 
-import kr.co.noticeboard.domain.dto.request.PostReqDTO;
-import kr.co.noticeboard.domain.dto.response.PostResDTO;
+import kr.co.noticeboard.service.dto.request.PostReqDTO;
+import kr.co.noticeboard.service.dto.response.PostResDTO;
 import kr.co.noticeboard.infra.response.ResponseFormat;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import kr.co.noticeboard.service.PostService;

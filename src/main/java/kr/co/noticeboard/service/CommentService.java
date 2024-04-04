@@ -1,6 +1,6 @@
 package kr.co.noticeboard.service;
 
-import kr.co.noticeboard.domain.dto.request.CommentReqDTO;
+import kr.co.noticeboard.service.dto.request.CommentReqDTO;
 import kr.co.noticeboard.domain.entity.Comment;
 import kr.co.noticeboard.domain.entity.DeleteStatus;
 import kr.co.noticeboard.domain.entity.Member;

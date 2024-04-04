@@ -1,9 +1,9 @@
 package kr.co.noticeboard.domain.entity;
 
 import jakarta.persistence.*;
-import kr.co.noticeboard.domain.dto.request.PostReqDTO;
-import kr.co.noticeboard.domain.dto.response.CommentResDTO;
-import kr.co.noticeboard.domain.dto.response.PostResDTO;
+import kr.co.noticeboard.service.dto.request.PostReqDTO;
+import kr.co.noticeboard.service.dto.response.CommentResDTO;
+import kr.co.noticeboard.service.dto.response.PostResDTO;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package kr.co.noticeboard.controller;
 
-import kr.co.noticeboard.domain.dto.request.CommentReqDTO;
+import kr.co.noticeboard.service.dto.request.CommentReqDTO;
 import kr.co.noticeboard.infra.response.ResponseFormat;
 import kr.co.noticeboard.infra.response.ResponseStatus;
 import kr.co.noticeboard.service.CommentService;

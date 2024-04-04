@@ -1,4 +1,4 @@
-package kr.co.noticeboard.domain.dto.request;
+package kr.co.noticeboard.service.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

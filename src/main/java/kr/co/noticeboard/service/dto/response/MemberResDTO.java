@@ -1,4 +1,4 @@
-package kr.co.noticeboard.domain.dto.response;
+package kr.co.noticeboard.service.dto.response;
 
 import lombok.*;
 
