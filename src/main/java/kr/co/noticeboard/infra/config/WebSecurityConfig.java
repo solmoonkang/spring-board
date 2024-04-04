@@ -24,6 +24,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
         // 요청되는 모든 URL을 허용
+        httpSecurity
+                .csrf().disable();
 
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/v1/members").permitAll()
